@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CGV 퀴즈 앱</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      color: white;
+    }
+    .screen {
+      display: none;
+      width: 100vw;
+      height: 100vh;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .active {
+      display: block;
+    }
+    .button {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 15px 30px;
+      background-color: #FFF8DC;
+      color: black;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .quiz-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .answer-button {
+      display: block;
+      margin: 10px auto;
+      padding: 10px;
+      background-color: black;
+      color: white;
+      border: 1px solid white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    .result-message {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+    .restart-button {
+      background-color: #ADFF2F;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Start Screen -->
+  <div id="start_screen" class="screen active" style="background-image: url('background.jpg');">
+    <button class="button" onclick="startQuiz()">퀴즈 시작</button>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz_screen" class="screen" style="background-image: url('q_bg.jpg');">
+    <div class="quiz-container">
+      <div id="question">문제가 여기에 표시됩니다.</div>
+      <div id="answers"></div>
+      <div id="progress">1/5</div>
+    </div>
+  </div>
+
+  <!-- Result Screen -->
+  <div id="result_screen" class="screen" style="background-image: url('f_bg.jpg');">
+    <div class="quiz-container">
+      <div id="score">맞춘 개수: 0/5</div>
+      <div id="result_message" class="result-message">멘트가 여기에 표시됩니다.</div>
+      <button class="button restart-button" onclick="restartQuiz()">다시하기</button>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      { question: '배신의 아이들이 방문한 사이트는?', answers: ['강남', '영등포', '왕십리', '연남', '용산아이파크몰'], correct: 1 },
+      { question: '영등포에 없는 편의시설은?', answers: ['원신 PC방', '만화카페', '포토부스', '픽업박스', '키오스크'], correct: 0 },
+      { question: '영등포는 상영관이 총 몇 개?', answers: ['6', '8', '10', '12', '14'], correct: 3 },
+      { question: '영등포에 있는 특별관이 아닌 것은?', answers: ['4DX', 'SCREENX', 'IMAX LASER', 'SWEETBOX', 'CINE de CHEF'], correct: 4 },
+      { question: '영등포에 없는 부대시설은?', answers: ['투썸 플레이스', '앤티앤스', '고피자', '만화카페', '키즈카페'], correct: 1 }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function startQuiz() {
+      document.getElementById('start_screen').classList.remove('active');
+      document.getElementById('quiz_screen').classList.add('active');
+      loadQuestion();
+    }
+
+    function loadQuestion() {
+      const questionData = quizData[currentQuestion];
+      document.getElementById('question').innerText = questionData.question;
+      document.getElementById('answers').innerHTML = '';
+      questionData.answers.forEach((answer, index) => {
+        const button = document.createElement('button');
+        button.innerText = answer;
+        button.classList.add('answer-button');
+        button.onclick = () => checkAnswer(index);
+        document.getElementById('answers').appendChild(button);
+      });
+      document.getElementById('progress').innerText = `${currentQuestion + 1}/5`;
+    }
+
+    function checkAnswer(selected) {
+      if (selected === quizData[currentQuestion].correct) {
+        score++;
+      }
+      currentQuestion++;
+      if (currentQuestion < quizData.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      document.getElementById('quiz_screen').classList.remove('active');
+      document.getElementById('result_screen').classList.add('active');
+      document.getElementById('score').innerText = `맞춘 개수: ${score}/5`;
+      let message = '';
+      if (score <= 3) message = '🎬퀴즈에 참여해주셔서 감사합니다!😊';
+      else if (score === 4) message = '🎬축하합니다 RVIP 등급입니다!⭐️';
+      else message = '🎬대단해요 SVIP 등급에 도달하셨습니다!👑';
+      document.getElementById('result_message').innerText = message;
+    }
+
+    function restartQuiz() {
+      score = 0;
+      currentQuestion = 0;
+      document.getElementById('result_screen').classList.remove('active');
+      document.getElementById('start_screen').classList.add('active');
+    }
+  </script>
+</body>
+</html>
