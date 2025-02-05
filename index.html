@@ -42,9 +42,9 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 80%;
-      background: rgba(0, 0, 0, 0.6);
       padding: 20px;
       border-radius: 10px;
+      color: white; /* 글씨 색상은 흰색 */
     }
     .answer-button {
       display: block;
@@ -56,12 +56,24 @@
       cursor: pointer;
       border-radius: 5px;
     }
+    #quiz_screen .quiz-container {
+      background: transparent; /* 문제 페이지에서는 배경을 투명하게 */
+    }
+    #result_screen .quiz-container {
+      background: transparent; /* 결과 페이지에서도 배경 투명하게 */
+    }
     .result-message {
       font-size: 24px;
       margin-top: 20px;
+      color: black; /* 결과 메시지 글씨 색상 검정 */
     }
     .restart-button {
-      background-color: #ADFF2F;
+      background-color: #FFDEA9; /* 다시하기 버튼 색상 변경 */
+      color: white;
+      margin-top: 50px; /* 버튼 위치 조정 */
+    }
+    #progress {
+      font-size: 18px;
       color: white;
     }
   </style>
